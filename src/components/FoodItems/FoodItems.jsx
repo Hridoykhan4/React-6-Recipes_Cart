@@ -1,6 +1,6 @@
 import PropTypes from "prop-types";
 import { FaStar } from "react-icons/fa";
-const FoodItems = ({ items }) => {
+const FoodItems = ({ items, handleAddToOrderItems }) => {
   return (
     <div className="md:w-9/12">
       <div className="grid md:grid-cols-3 grid-cols-1 gap-7">
@@ -68,7 +68,12 @@ const FoodItems = ({ items }) => {
               </span>
             </p>
             <div className="flex mt-3">
-              <button className="btn btn-primary ">Place Order</button>
+              <button
+                onClick={() => handleAddToOrderItems(item)}
+                className="btn btn-primary "
+              >
+                Place Order
+              </button>
             </div>
           </div>
         ))}
@@ -79,5 +84,6 @@ const FoodItems = ({ items }) => {
 
 FoodItems.propTypes = {
   items: PropTypes.array,
+  handleAddToOrderItems: PropTypes.func,
 };
 export default FoodItems;
