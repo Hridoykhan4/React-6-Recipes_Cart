@@ -79,9 +79,9 @@ function App() {
       }
       if (gatherMatched) {
         setItems(gatherMatched);
-      } else {
-        setItems(tempItem);
       }
+    } else {
+      setItems(tempItem);
     }
   };
 
