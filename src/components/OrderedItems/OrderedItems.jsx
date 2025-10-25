@@ -17,12 +17,12 @@ function OrderedItems({ orderItems, handleRemove }) {
               <th>title</th>
               <th>cuisine</th>
               <th>image</th>
-              <th>Remove</th>
+              <th>Action</th>
             </tr>
           </thead>
           <tbody>
             {orderItems.map((item, id) => (
-              <tr key={id} className="">
+              <tr key={id} >
                 <td>{item?.name}</td>
                 <td>{item?.cuisine}</td>
                 <td>

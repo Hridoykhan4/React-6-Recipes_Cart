@@ -14,10 +14,13 @@ const addToLS = (id) => {
 };
 
 const removeFromLS = (id) => {
-  console.log(id);
   const item = getStoredItems();
-  const remaining = item.filter((i) => i !== id);
-  saveToLS(remaining);
+  const index = item.findIndex((i) => i === id);
+  if (index !== -1) {
+    const updated = [...item];
+    updated.splice(index, 1);
+    saveToLS(updated);
+  }
 };
 
 export { getStoredItems, addToLS, removeFromLS };

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import "./App.css";
 import { useEffect } from "react";
 import FoodItems from "./components/FoodItems/FoodItems";
@@ -15,14 +15,22 @@ function App() {
   const [spinner, setSpinner] = useState(false);
   const [orderItems, setOrderItems] = useState([]);
   const [tempItem, setTempItems] = useState([]);
+  const [current, setCurrent] = useState(1);
+  const itemsPerPage = 6;
+
+  const numberOfPages = useMemo(
+    () => Math.ceil(items.length / itemsPerPage),
+    [items]
+  );
+
   useEffect(() => {
     const loadData = async () => {
       const res = await fetch("https://dummyjson.com/recipes");
       const data = await res.json();
       setItems(data.recipes);
+      setTempItems(data.recipes);
       setCartLoad(data.recipes);
       setSpinner(false);
-      setTempItems(data.recipes);
     };
     setSpinner(true);
     loadData();
@@ -39,13 +47,17 @@ function App() {
   };
 
   const handleRemove = (itemForRemove) => {
-    const remaining = orderItems.filter((item) => item.id !== itemForRemove.id);
-    setOrderItems(remaining);
-    removeFromLS(itemForRemove.id);
-    toast.success("Successfully Removed", {
-      position: "top right",
-      className: "p-5 text-lg font-semibold",
-    });
+    const index = orderItems.findIndex((item) => item.id === itemForRemove.id);
+    if (index !== -1) {
+      const updated = [...orderItems];
+      updated.splice(index, 1);
+      setOrderItems(updated);
+      removeFromLS(itemForRemove.id);
+      toast.success("Successfully Removed", {
+        position: "top right",
+        className: "p-5 text-lg font-semibold",
+      });
+    }
   };
 
   const handleAddToOrderItems = (selectedItem) => {
@@ -79,15 +91,26 @@ function App() {
       }
       if (gatherMatched) {
         setItems(gatherMatched);
+        setCurrent(1);
       }
     } else {
       setItems(tempItem);
     }
   };
 
+  const handlePages = (page) => {
+    setCurrent(page);
+    // window.scrollTo({ behavior: "smooth", top: 0 });
+  };
+
+  const currentItems = useMemo(() => {
+    const startIndex = (current - 1) * itemsPerPage;
+    return items.slice(startIndex, startIndex + itemsPerPage);
+  }, [items, current]);
+
   return (
     <>
-      <div className="navbar flex justify-between bg-primary text-primary-content">
+      <div className="navbar flex justify-between bg-primary text-primary-content">g
         <button className="btn btn-ghost sm:text-xl text-lg">
           Bistro Restaurant
         </button>
@@ -134,12 +157,26 @@ function App() {
       <section className="max-w-[1440px] w-11/12 mx-auto flex gap-5 flex-col-reverse md:flex-row pb-10">
         <FoodItems
           handleAddToOrderItems={handleAddToOrderItems}
-          items={items}
+          items={currentItems}
         ></FoodItems>
         <OrderedItems
           handleRemove={handleRemove}
           orderItems={orderItems}
         ></OrderedItems>
+      </section>
+
+      <section className="flex justify-center items-center gap-3 py-4">
+        {[...Array(numberOfPages).keys()].map((i) => (
+          <button
+            onClick={() => handlePages(i + 1)}
+            className={`${
+              current === i + 1 ? "btn-primary" : "btn-outline"
+            } btn`}
+            key={i}
+          >
+            {i + 1}
+          </button>
+        ))}
       </section>
     </>
   );

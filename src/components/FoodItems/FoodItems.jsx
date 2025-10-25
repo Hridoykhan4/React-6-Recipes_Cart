@@ -11,13 +11,13 @@ const FoodItems = ({ items, handleAddToOrderItems }) => {
             </figure>
             <div className="mt-5 space-y-3">
               <h2 className="font-bold text-xl">{item?.name}</h2>
-              <p className="md:h-52 overflow-y-auto">
+              {/* <p className="md:h-52 overflow-y-auto">
                 Instructions :
                 <span className="font-semibold">{item?.instructions}</span>
-              </p>
+              </p> */}
             </div>
 
-            <div className="grid mt-4 grid-cols-2 gap-4">
+            {/*  <div className="grid mt-4 grid-cols-2 gap-4">
               <div>
                 <h3 className="">
                   <span className="font-bold text-lg">Prep</span>:{" "}
@@ -42,12 +42,12 @@ const FoodItems = ({ items, handleAddToOrderItems }) => {
                   {item?.difficulty}
                 </p>
               </div>
-            </div>
-            <ul className="list-decimal list-inside mt-3">
-              {item?.ingredients.map((ingridient, i) => (
-                <li key={i}>{ingridient}</li>
+            </div> */}
+            {/*   <ul className="list-decimal list-inside mt-3">
+              {item?.ingredients.map((ingredient, i) => (
+                <li key={i}>{ingredient}</li>
               ))}
-            </ul>
+            </ul> */}
             <p className="mt-3">
               <span className="font-bold text-lg">Meal Type</span> :{" "}
               <span>{item?.mealType}</span>
@@ -58,11 +58,12 @@ const FoodItems = ({ items, handleAddToOrderItems }) => {
                 {item?.rating}{" "}
                 {item?.rating > 4.8 && (
                   <span>
-                    <FaStar className="inline-block" />{" "}
-                    <FaStar className="inline-block" />{" "}
-                    <FaStar className="inline-block" />
-                    <FaStar className="inline-block" />
-                    <FaStar className="inline-block" />
+                    {[...Array(5)].map((_, i) => (
+                      <FaStar
+                        key={i}
+                        className="inline-block text-orange-600"
+                      />
+                    ))}
                   </span>
                 )}
               </span>
